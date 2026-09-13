@@ -63,10 +63,11 @@ lookup, and no fallback to a system k6. A consumer that installs with
    Copy them into `K6_RELEASE.expectedExecutables`, then run the same command
    without `--accept-source` to confirm the build is stable.
 
-3. Open a pull request. The Verify workflow regenerates the source on a
-   GitHub-hosted runner, rebuilds all five targets, and fails unless every
-   executable matches `expectedExecutables` and the regenerated
-   `source-manifest.json` matches the committed one.
+3. Open a pull request. The Verify workflow regenerates the source on the
+   self-hosted orthrus runner (labels `testkit-k6`, `orthrus-ubuntu`),
+   rebuilds all five targets, and fails unless every executable matches
+   `expectedExecutables` and the regenerated `source-manifest.json` matches
+   the committed one. The Release workflow runs on the same runner.
 4. Merge, then tag:
 
    ```sh
