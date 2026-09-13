@@ -7,12 +7,7 @@ if (tag !== expectedTag) {
   throw new Error(`Release tag must be ${expectedTag}, got ${String(tag)}`);
 }
 for (const name of K6_PACKAGE_NAMES) {
-  const result = await runManagedCommand(
-    "npm",
-    ["view", `${name}@${K6_RELEASE.packageVersion}`, "version", "--json"],
-    { cwd: REPOSITORY_ROOT, label: `npm view ${name}`, timeoutMs: 60_000 },
-  );
-  if (result.stdout.trim() !== "") {
+  if ((await publishedVersions(name)).includes(K6_RELEASE.packageVersion)) {
     throw new Error(
       `${name}@${K6_RELEASE.packageVersion} is already published`,
     );
@@ -21,3 +16,18 @@ for (const name of K6_PACKAGE_NAMES) {
 console.log(
   `Ready to publish ${K6_PACKAGE_NAMES.length.toString()} packages at ${K6_RELEASE.packageVersion}`,
 );
+
+async function publishedVersions(name: string): Promise<string[]> {
+  try {
+    const result = await runManagedCommand(
+      "npm",
+      ["view", name, "versions", "--json"],
+      { cwd: REPOSITORY_ROOT, label: `npm view ${name}`, timeoutMs: 60_000 },
+    );
+    const parsed: unknown = JSON.parse(result.stdout);
+    return Array.isArray(parsed) ? parsed.map(String) : [String(parsed)];
+  } catch (error) {
+    if (error instanceof Error && error.message.includes("E404")) return [];
+    throw error;
+  }
+}
