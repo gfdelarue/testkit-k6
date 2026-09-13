@@ -41,7 +41,7 @@ export function pinnedGoBuildEnvironment({
     GOCACHE: path.join(stateRoot, "build-cache"),
     GOENV: "off",
     GOEXPERIMENT: "",
-    GOFLAGS: "",
+    GOFLAGS: "-modcacherw",
     GOMODCACHE: path.join(stateRoot, "module-cache"),
     GOOS: "",
     GOARCH: "",
