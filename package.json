@@ -16,6 +16,7 @@
   "scripts": {
     "build": "tsx src/runtime.ts",
     "pack": "tsx src/pack.ts",
+    "publish-packages": "tsx src/publish.ts",
     "release-check": "tsx src/release-check.ts",
     "verify-published": "tsx src/verify-published.ts",
     "format": "prettier --write .",
