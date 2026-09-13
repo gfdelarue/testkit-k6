@@ -1,0 +1,32 @@
+{
+  "name": "testkit-k6-build",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Builds and publishes Testkit's custom k6 executable as npm platform packages",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gfdelarue/testkit-k6.git"
+  },
+  "engines": {
+    "node": ">=24.14.1 <25.0.0",
+    "npm": ">=11.10.0 <12.0.0"
+  },
+  "scripts": {
+    "build": "tsx src/runtime.ts",
+    "pack": "tsx src/pack.ts",
+    "release-check": "tsx src/release-check.ts",
+    "verify-published": "tsx src/verify-published.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.1",
+    "prettier": "3.9.6",
+    "tar": "7.5.21",
+    "tsx": "4.23.12",
+    "typescript": "5.9.3"
+  }
+}
