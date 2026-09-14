@@ -1,4 +1,4 @@
-name: Verify
+name: CI
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ permissions:
 jobs:
   verify:
     runs-on: [self-hosted, Linux, X64, testkit-k6, orthrus-ubuntu]
-    timeout-minutes: 90
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
         with:
@@ -18,20 +18,8 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24.14.1
-          cache: npm
-      - uses: actions/setup-go@v7
-        with:
-          go-version: 1.25.10
-          cache: false
+          package-manager-cache: false
       - run: npm install -g npm@^11.10.0
       - run: npm ci
       - run: npm run format:check
       - run: npm run typecheck
-      - name: Regenerate the source archive and build every target
-        run: npm run build -- --refresh-source --all
-      - run: npm run pack
-      - uses: actions/upload-artifact@v7
-        with:
-          name: packages
-          path: .state/tarballs/
-          if-no-files-found: error

@@ -18,7 +18,6 @@
     "pack": "tsx src/pack.ts",
     "publish-packages": "tsx src/publish.ts",
     "release-check": "tsx src/release-check.ts",
-    "verify-published": "tsx src/verify-published.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc -p tsconfig.json"
