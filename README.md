@@ -63,25 +63,20 @@ lookup, and no fallback to a system k6. A consumer that installs with
    Copy them into `K6_RELEASE.expectedExecutables`, then run the same command
    without `--accept-source` to confirm the build is stable.
 
-3. Open a pull request. The Verify workflow regenerates the source on the
-   self-hosted orthrus runner (labels `testkit-k6`, `orthrus-ubuntu`),
-   rebuilds all five targets, and fails unless every executable matches
-   `expectedExecutables` and the regenerated `source-manifest.json` matches
-   the committed one.
+3. Open a pull request. CI runs formatting and type checks on the self-hosted
+   Orthrus runner. Builds run when you release.
 4. Merge, then tag:
 
    ```sh
    git tag v1.2.3 && git push origin v1.2.3
    ```
 
-   The Release workflow's build job runs on the orthrus runner: it rebuilds
-   from scratch, refuses to run if the tag does not equal `v<packageVersion>`
-   or any package version already exists, packs the six tarballs, and uploads
-   them as the `packages` artifact. The publish job then runs on a
-   GitHub-hosted runner, because the npm registry only accepts provenance
-   from GitHub-hosted runners: it downloads the artifact, checks every
-   tarball against the packed digests, and publishes the source package
-   followed by the five platform packages with npm trusted publishing.
+   The Release workflow runs in one GitHub-hosted job for npm trusted
+   publishing. It checks that the tag equals `v<packageVersion>`, builds all
+   five targets, packs the six packages, and publishes the source package
+   followed by the platform packages. The workflow succeeds when every
+   `npm publish` succeeds. npm can take a few minutes to make the packages
+   available after accepting them.
 
 5. In Testkit, update the five `optionalDependencies` pins and, for a k6
    upgrade, the expected k6 version constant in the resolver.
